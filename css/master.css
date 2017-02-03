@@ -1,0 +1,137 @@
+body {
+  background-image: url("../images/background.png");
+  font-family: 'Roboto', sans-serif;
+}
+
+textarea {
+  background-color:#fafafa !important;
+}
+
+.createProposal {
+
+}
+
+i.fa {
+  font-size: 1.5em;
+  color: #999;
+}
+
+.header_title {
+  color: rgb(30, 115, 190);
+  font-weight: 600;
+  margin: 0;
+}
+
+.header_description {
+  margin: 1% 0% 5% 0%;
+  font-weight: 600;
+  line-height:1.5em;
+}
+
+.input-spacing {
+  margin: 5%;
+}
+
+.progress {
+  margin-top: 10px;
+}
+
+.tab-content {
+  margin-top:40px;
+}
+
+.proposalBlock {
+  padding: 5% 5% 2% 5%;
+  background-color: #ffffff;
+  box-shadow: 0px 17px 24px 0px rgba(0, 0, 0, 0.16);
+}
+
+.removeMargin {
+  margin: 0;
+}
+
+.validationError {
+  background-color:#ffe6e6;
+}
+
+.walletCommands {
+
+}
+
+#dash_logo {
+  width: 150px;
+  height: auto;
+}
+
+#header {
+  margin-top:2em;
+}
+
+/*#createProposalHeader {
+   margin-top:1em;
+}*/
+
+#createProposalForm {
+   margin-top:1em;
+}
+
+#lang_box {
+  width: 82px;
+  position: relative;
+  top: -4px;
+}
+
+#payment_amount {
+  display: inline-block;
+  width: 20%;
+}
+
+#side-header {
+  margin-top: 40%;
+}
+
+#side_header_description {
+  margin: 20% 0% 20% 0%;
+}
+
+#proposal_link {
+  font-weight: 600;
+}
+
+@media (max-width: 992px) {
+  #side-header {
+    margin-top: 4%;
+  }
+
+  .proposalBlock {
+    margin-top: 0%;
+  }
+
+  .header_description {
+    margin: 1% 0% 1% 0%;
+  }
+
+  #side_header_description {
+    margin: 1% 0% 1% 0%;
+  }
+}
+
+#walletCommandsHeader {
+  margin-top:2em;
+}
+
+#walletCommandsPrepare {
+  margin-top:2em;
+}
+
+#walletCommandsTx {
+  margin-top:2em;
+}
+
+#walletCommandsProgress {
+  margin-top:2em;
+}
+
+#walletCommandsSubmit {
+  margin-top:2em;
+}

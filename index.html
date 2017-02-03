@@ -2,9 +2,506 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+
+    <title>Dash Governance Tools</title>
+
+    <link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+    <script src="bitcore-lib-dash.js"></script>
+
+    <script src="vendor/jquery/jquery-3.1.1.min.js"></script>
+
+    <link rel="stylesheet" href="vendor/jquery-ui/jquery-ui.min.css">
+    <script src="vendor/jquery-ui/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="vendor/fontawesome/f0153b9f7b.js"></script>
+
+    <link rel="stylesheet" href="css/master.css">
+    <script src="js/proposalGenerator.js"></script>
+    <script src="js/paymentCycle.js"></script>
+    <!-- <script src="js/transactionListener.js"></script> -->
+    <script src="js/txListener.js"></script>
+    <script src="js/formHandler.js"></script>
+
+    <script src="https://dev-test.dash.org/socket.io/socket.io.js"></script>
+
+    <script type="text/javascript">
+
+        var Bitcore = require('bitcore-lib-dash');
+
+        var socket;
+        var paymentCycle;
+
+        var mainnetProvider = 'http://insight.dev.dash.org';
+        var mainnetPrefix = '/api';
+
+        var testnetProvider = 'http://test-insight.dev.dash.org';
+        var testnetPrefix = '/insight-api-dash';
+
+        var init = function(network, provider, prefix) {
+            var gov = new Bitcore.GovObject.Proposal();
+            gov.network = network || 'mainnet';
+
+            paymentCycle = new PaymentCycle(gov, provider, prefix);
+
+            socket = io(provider);
+
+            socket.on('connect', function() {
+                socket.emit('subscribe', 'inv');
+                console.log("socket.io initialized...");
+            });
+
+            socket.on('disconnect', function() {
+              console.log('connection lost');
+              alert('We sorry; connection lost.');
+            });
+
+            return gov;
+        };
+
+        var updateTotal = function() {
+            paymentCycle.selectedPeriods = $('#end_epoch').find(':selected').data('index');
+
+            var payment_amount = parseInt($('#payment_amount').val());
+            if (isNaN(payment_amount)) payment_amount = 0;
+
+            var periods = parseInt((paymentCycle.selectedPeriods+1)-paymentCycle.selectedStartIndex);
+
+            var label = $('#end_epoch').find(':selected').data('label');
+
+            $('#total_amount').text(payment_amount * periods);
+            $('#total_amount_due').text(" with a final payment on " + label);
+        };
+
+        $(document).ready(function() {
+
+            var gov = init('mainnet', mainnetProvider, mainnetPrefix); // default network;
+
+            $('#mainnet').change(function() { gov = init('mainnet', mainnetProvider, mainnetPrefix); });
+            $('#testnet').change(function() { gov = init('testnet', testnetProvider, testnetPrefix); });
+
+            $('#start_epoch').change(function() {
+                paymentCycle.selectedStartIndex = $('#start_epoch').find(':selected').data('index');
+                paymentCycle.updateEndEpoch();
+
+                updateTotal();
+            });
+
+            $('#end_epoch').change(function() {
+                updateTotal();
+            });
+
+            $('#payment_amount').change(function() {
+                updateTotal();
+            });
+
+            $("#time").val(Math.floor((new Date).getTime() / 1000));
+
+            $('#prepareProposal').click(function() {
+                copyToClipboard($(this).attr('id'));
+            });
+
+            $('#submitProposal').click(function() {
+                copyToClipboard($(this).attr('id'));
+            });
+
+            $('#feeTxid').focus(function() {
+                if ($(this).hasClass('validationError')) {
+                    $(this).val('');
+                }
+                $(this).removeClass('validationError');
+            });
+
+            $('.createProposal input').focus(function() {
+                if ($(this).hasClass('validationError')) {
+                    $(this).val('');
+                }
+                $(this).removeClass('validationError');
+            });
+
+            $('#btnPrepare').click(function() {
+
+                var proposal = new ProposalGenerator(gov);
+
+                var validProposal = proposal.validate();
+
+                if (validProposal) {
+                    document.getElementById('step_two').click();
+                    $('#step_two').removeClass('hidden');
+                    document.getElementsByClassName('progress-bar')[0].style.width = "50%";
+                    document.getElementsByClassName('progress-bar')[0].innerText = "Generated wallet commands";
+                    $('#network_toggle').addClass('hidden');
+
+                    proposal.walletCommands();
+
+                    // transactionListener(proposal);
+
+                    $('#btnEdit').click(function() {
+                        proposal.createProposal();
+                    });
+
+                    $('#btnNew').click(function() {
+                        proposal.resetProposal();
+                        $('#network_toggle').removeClass('hidden');
+
+                        $('#step_two').addClass('hidden');
+                        $('#step_three').addClass('hidden');
+                        $('#step_four').addClass('hidden');
+                        document.getElementsByClassName('progress-bar')[0].style.width = "25%";
+                        document.getElementsByClassName('progress-bar')[0].innerText = "Create Proposal";
+                    });
+                }
+            });
+
+            $('#feeTxid').on('input', function() {
+
+                var proposal = new ProposalGenerator(gov);
+
+                var transaction = $(this).val();
+                var txListener = new TXListener(socket, paymentCycle.provider, paymentCycle.prefix, transaction);
+
+                // check if tx exists in insight
+                txListener.getTx(function(err, res) {
+                    if(err) {
+                      console.log("Error:", err);
+                      if(err == 404) {
+                        $('#feeTxid').addClass('validationError');
+                        $('#feeTxid').val('Transaction ID not found');
+                        $('#error_modal').modal('show');
+                        $('#error_text').text('Proposal transaction ID not found');
+                      } else if (err == 400) {
+                        $('#feeTxid').addClass('validationError');
+                        $('#feeTxid').val('Please paste a valid transaction ID');
+                        $('#error_modal').modal('show');
+                        $('#error_text').text('Please paste a valid transaction ID');
+                      }
+
+                    }
+                    if(res) {
+                        console.log("Response:", res);
+
+                        // transaction exists, proceed to step three
+                        document.getElementById('step_three').click();
+                        $('#step_three').removeClass('hidden');
+                        document.getElementsByClassName('progress-bar')[0].style.width = "75%";
+                        document.getElementsByClassName('progress-bar')[0].innerText = "Awaiting transaction confirmation";
+
+                        $('#walletCommandsProgress').removeClass('hidden'); // probably a better way to do this....
+                        $("#progressbar").progressbar({value: 0}); // TXListener will bump this along as confirmations occur
+
+                        txListener.blockheight = res.blockheight;
+                        txListener.confirmations = res.confirmations;
+
+                        txListener.initSocket(function() {
+                            $('#walletCommandsSubmit').removeClass('hidden');
+                            document.getElementById('step_four').click();
+                            $('#step_four').removeClass('hidden');
+                            document.getElementsByClassName('progress-bar')[0].style.width = "100%";
+                            document.getElementsByClassName('progress-bar')[0].innerText = "Proposal ready for submission";
+                            console.log($('#feeTxid').val());
+                            var submitCommand = "gobject submit " + $('#parentHash').val() + " " + $('#revision').val() + " " + $('#time').val() + " " + proposal.gov.serialize() + " " + $('#feeTxid').val();
+                            console.log(submitCommand);
+                            $('textarea#submitProposal').val(submitCommand);
+                        }); // callback issued after tx confirmations >= 6
+
+                    }
+                });
+            });
+        });
+    </script>
+
 </head>
 <body>
+
+  <div class="modal fade" id="error_modal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gridSystemModalLabel">Error</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-offset-4 col-xs-8">
+            <div id="error_text">
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="container-fluid">
+  <div class="row" id="header">
+      <div class="col-md-2">
+        <img id="dash_logo" src="images/dash_logo.png" alt="dash governance tools">
+        <div class="row">
+          <div class="col-xs-12">
+            <h4><i>Governance Tools</i></h4>
+          </div>
+        </div>
+      </div>
+      <!--  -->
+      <!--  -->
+      <!-- Social icons commented out until we get URIs  -->
+      <!--  -->
+      <!-- <div class="col-md-4 col-md-offset-2 text-right">
+        <i class="fa fa-twitter" aria-hidden="true"></i>
+        <i class="fa fa-facebook" aria-hidden="true"></i>
+        <i class="fa fa-rss" aria-hidden="true"></i>
+        <img id="lang_box" src="images/lang.png" alt="english language">
+      </div> -->
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="25"
+        aria-valuemin="0" aria-valuemax="100" style="width:25%">
+          Create Proposal
+        </div>
+      </div>
+      <ul class="nav nav-pills">
+        <li class="active"><a id="step_one" data-toggle="tab" href="#step1">Create a Proposal</a></li>
+        <li><a id="step_two" class="hidden" data-toggle="tab" href="#step2">Wallet Commands</a></li>
+        <li><a id="step_three" class="hidden" data-toggle="tab" href="#step3">Confirm Transaction</a></li>
+        <li><a id="step_four" class="hidden" data-toggle="tab" href="#step4">Submit Proposal</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-2 col-md-2 col-md-push-8">
+      <div class="row" id="side-header">
+        <div class="col-xs-12">
+          <div >
+            <h3 class="header_title">Dash Budget Proposal</h3>
+            <p id="side_header_description" class="header_description">Generate budget proposal commands you can copy/paste into your Dash wallet to prepare a budget proposal and submit it to the network.</p>
+            <a href="#"><h5 id="proposal_link">Proposal Generator</h5></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-6 col-md-offset-2 col-md-pull-2 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
+
+      <div class="tab-content">
+        <div id="step1" class="tab-pane fade in active">
+          <div class="proposalBlock createProposal">
+            <div class="row">
+              <div class="col-xs-offset-8 col-xs-4">
+                <div id="network_toggle" class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-primary active">
+                        <input type="radio" name="options" id="mainnet" autocomplete="off" checked> Mainnet
+                    </label>
+                    <label class="btn btn-primary">
+                        <input type="radio" name="options" id="testnet" autocomplete="off"> Testnet
+                    </label>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="row" id="createProposalHeader">
+                    <div class="col-xs-12">
+                        <h1 class="removeMargin">Create a Proposal</h1>
+                        <h5 class="header_description">Enter details for your proposal and click 'Create Proposal'.  This will generate a command you can run in your local wallet to prepare the proposal at a cost of 5 DASH.</h5>
+                    </div>
+                </div>
+
+                <div id="createProposalForm">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <div class="form-group">
+                          <label for="name">Proposal Name:</label>
+                          <input type="text" class="form-control" id="name" value="" placeholder="proposal-name">
+                      </div>
+                      <div class="form-group">
+                          <label for="url">Proposal Description URL:</label>
+                          <input type="text" class="form-control" id="url" value="" placeholder="https://www.dashcentral.org/p/proposal-name">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-xs-3">
+                      <div class="form-group">
+                          <label for="start_epoch">Payment Date:</label>
+                          <select name="start_epoch" class="form-control" id="start_epoch"></select>
+                      </div>
+                    </div>
+                    <div class="col-xs-3">
+                      <!--  -->
+                      <!--  -->
+                      <!-- ATTENTION: COMMENT FOR JON -->
+                      <!--  -->
+                      <!--  -->
+                      <!-- The following form group is a placeholder for proposal end time. Please change to the correct id. -->
+                      <div class="form-group">
+                          <label for="start_epoch">Payments:</label>
+                          <select name="start_epoch" class="form-control" id="end_epoch"></select>
+                      </div>
+                      <!--  -->
+                      <!--  -->
+                      <!--  -->
+                    </div>
+                    <div class="col-xs-6">
+                      <div class="form-group">
+                          <label for="payment_address">Payment Address:</label>
+                          <input type="text" class="form-control" id="payment_address" value="" placeholder="">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-xs-7">
+                      <div class="form-group">
+                          <label for="payment_amount">Payment Amount:</label>
+                          <input type="text" class="form-control" id="payment_amount" value="" placeholder="0">
+                      </div>
+                    </div>
+                    <div class="col-xs-4">
+                      <input type="submit" class="btn btn-success" id="btnPrepare" value="Create Proposal">
+                      <div class="input-spacing">
+                        <input type="submit" class="btn btn-primary hidden" id="btnEdit" value="Edit Proposal">
+                      </div>
+                      <div class="input-spacing">
+                        <input type="submit" class="btn btn-primary hidden" id="btnNew" value="New Proposal">
+                      </div>
+                    </div>
+                  </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label for="total_amount">Total Amount: </label>
+                                <span id="total_amount">0</span> <span>DASH</span> <span id="total_amount_due"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                  <div class="form-group" style="display:none;">
+                      <label for="type">type:</label>
+                      <input type="text" class="form-control" id="type" value="1" placeholder="1">
+                  </div>
+
+                  <div class="form-group" style="display:none;">
+                      <label for="parentHash">parent-hash:</label>
+                      <input type="text" class="form-control" id="parentHash" value="0" placeholder="0">
+                  </div>
+
+                  <div class="form-group" style="display:none;">
+                      <label for="revision">revision:</label>
+                      <input type="text" class="form-control" id="revision" value="1" placeholder="1">
+                  </div>
+
+                  <div class="form-group" style="display:none;">
+                      <label for="time">Creation Time:</label>
+                      <input type="text" class="form-control" id="time" value="" placeholder="">
+                  </div>
+
+                  <!--  -->
+                  <!--  -->
+                  <!--  -->
+                  <!-- ATTENTION: COMMENT FOR JON -->
+                  <!-- The following form group is commented out because it's not a part of the design mock. Staying here for safe keeping just in case still needed. -->
+
+                  <!-- <div class="form-group">
+                      <label for="end_epoch">Choose payment cycle:</label>
+                      <select name="end_epoch" class="form-control" id="end_epoch"></select>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="step2" class="tab-pane fade">
+          <div class="proposalBlock">
+            <div class="row walletCommands hidden" id="walletCommandsHeader">
+                <div class="col-xs-12">
+                    <h2>Wallet Commands</h2>
+                </div>
+
+            </div>
+
+            <div class="row walletCommands hidden" id="walletCommandsPrepare">
+
+                <div class="col-xs-12">
+
+                        <div class="form-group">
+                            <label for="prepareProposal">Prepare-Proposal Command:</label>
+                            <div>Paste this proposal command into your wallet console to spend a Fee transaction of 5 DASH.</div>
+                            <textarea readonly class="form-control" id="prepareProposal" rows="4" placeholder=""></textarea>
+                        </div>
+
+                </div>
+
+            </div>
+
+            <div class="row walletCommands hidden" id="walletCommandsTx">
+
+                <div class="col-xs-12">
+
+                    <div class="form-group">
+                        <label for="feeTxid">Fee Transaction ID:</label>
+                        <div>Paste the transaction ID returned by the wallet below to generate the final submit command.</div>
+                        <input type="text" class="form-control" id="feeTxid" value="" placeholder="<fee-txid>">
+                    </div>
+
+                </div>
+
+            </div>
+          </div>
+        </div>
+        <div id="step3" class="tab-pane fade">
+          <div class="proposalBlock">
+            <div class="row walletCommands hidden" id="walletCommandsProgress">
+
+                <div class="col-xs-12">
+
+                    <div class="form-group">
+                        <label for="feeTxid">Fee Transaction Progress:</label>
+                        <div id="progresstxt">We'll wait for 6 confirmations. Waiting for new blocks to confirm...</div>
+                        <div id="progressbar"></div>
+                    </div>
+
+                </div>
+
+            </div>
+          </div>
+        </div>
+        <div id="step4" class="tab-pane fade">
+          <div class="proposalBlock">
+            <div class="row walletCommands hidden" id="walletCommandsSubmit">
+
+                <div class="col-xs-12">
+
+                    <div class="form-group">
+                        <label for="submitProposal">Submit Proposal Command:</label>
+                        <div>Paste the Fee TX id to generate the proposal submit command.  This is the final step and can be completed after 6 confirmations on the fee tx.</div>
+                        <textarea readonly class="form-control" id="submitProposal" rows="4" placeholder=""></textarea>
+                    </div>
+
+                </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
 
 </body>
 </html>
