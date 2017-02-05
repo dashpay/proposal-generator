@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 
-    <title>Dash Governance Tools</title>
+    <title>Dash Budget Proposal Generator</title>
 
     <link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
@@ -27,7 +27,7 @@
     <script src="js/txListener.js"></script>
     <script src="js/formHandler.js"></script>
 
-    <script src="https://dev-test.dash.org/socket.io/socket.io.js"></script>
+    <script src="https://insight.dash.org:443/socket.io/socket.io.js"></script>
 
     <script type="text/javascript">
 
@@ -36,11 +36,11 @@
         var socket;
         var paymentCycle;
 
-        var mainnetProvider = 'http://insight.dev.dash.org';
+        var mainnetProvider = 'https://insight.dash.org:443';
         var mainnetPrefix = '/api';
 
-        var testnetProvider = 'http://test-insight.dev.dash.org';
-        var testnetPrefix = '/insight-api-dash';
+        var testnetProvider = 'https://insight.dev.dash.org:443';
+        var testnetPrefix = '/api';
 
         var init = function(network, provider, prefix) {
             var gov = new Bitcore.GovObject.Proposal();
