@@ -1,6 +1,12 @@
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../vendor/montserrat/montserrat-regular-webfont.woff2') format('woff2'),
+         url('../vendor/montserrat/montserrat-regular-webfont.woff') format('woff');
+}
+
 body {
   background-image: url("../images/background.png");
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 textarea {
@@ -17,14 +23,14 @@ i.fa {
 }
 
 .header_title {
-  color: rgb(30, 115, 190);
+  color: #1d71b8;
   font-weight: 600;
   margin: 0;
 }
 
 .header_description {
   margin: 1% 0% 5% 0%;
-  font-weight: 600;
+  font-weight: 300;
   line-height:1.5em;
 }
 
@@ -38,6 +44,7 @@ i.fa {
 
 .tab-content {
   margin-top:40px;
+  margin-bottom: 80px;
 }
 
 .proposalBlock {
@@ -134,4 +141,73 @@ i.fa {
 
 #walletCommandsSubmit {
   margin-top:2em;
+}
+.nav>li.active>a {
+  border-radius: 4px;
+  border: 0px solid;
+  padding: 5px 15px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  line-height: 30px;
+  min-height: 40px;
+  display: inline-block;
+  font-weight: 300;
+  font-size: 1.3em;
+  background-color: #1c75bc;
+  color: #fff;
+  box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.08), 0px 4px 6px 0px rgba(49,49,93,0.13);
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
+}
+.nav>li.active>a:hover{
+  background-color: #1e7dc9;
+  transform: translateY(-1px);
+  box-shadow: 0 7px 14px rgba(50,50,93,0.1), 0 3px 6px rgba(0,0,0,0.08);
+}
+.btn{
+  font-weight: 300;
+  background-color: #1c75bc;
+  color: #fff;
+  box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.08), 0px 4px 6px 0px rgba(49,49,93,0.13);
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
+  border: 0;
+}
+
+.btn:hover,.btn:active,.btn:focus{
+  background-color: #1e7dc9;
+  color: #fff !important;
+}
+
+.btn-success{
+  line-height: 30px;
+  min-height: 40px;
+  display: inline-block;
+  font-weight: 300;
+  font-size: 1em;
+}
+
+.btn-success:hover,.btn-success:active,.btn-success:focus{
+  background-color: #1e7dc9;
+  color: #fff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 7px 14px rgba(50,50,93,0.1), 0 3px 6px rgba(0,0,0,0.08);
+  border: 0;
+}
+
+a {
+  color: #3297e8;
+  text-decoration: none;
+  font-weight: 300;
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
+}
+
+a:visited {
+  color: #6eb3e9;
+}
+
+a:hover {
+  color: #3b9ce9;
+  text-decoration: none;
 }
