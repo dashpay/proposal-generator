@@ -426,7 +426,7 @@
         </div>
         <div id="step2" class="tab-pane fade">
           <div class="proposalBlock">
-            <div class="row walletCommands hidden" id="walletCommandsHeader">
+            <div class="row walletCommands hidden" id="walletCommandsHeader" style="margin-top:0em;">
                 <div class="col-xs-12">
                     <h2>Wallet Commands</h2>
                 </div>
@@ -438,8 +438,8 @@
                 <div class="col-xs-12">
 
                         <div class="form-group">
-                            <label for="prepareProposal">Prepare-Proposal Command:</label>
-                            <div>Paste this proposal command into your wallet console to spend a Fee transaction of 5 DASH.</div>
+                            <label for="prepareProposal">Prepare Proposal Command:</label>
+                            <p>Paste the following into your wallet console to generate the Proposal at a cost of 5 DASH.</p>
                             <textarea readonly class="form-control" id="prepareProposal" rows="4" placeholder=""></textarea>
                         </div>
 
@@ -452,8 +452,8 @@
                 <div class="col-xs-12">
 
                     <div class="form-group">
-                        <label for="feeTxid">Fee Transaction ID:</label>
-                        <div>Paste the transaction ID returned by the wallet below to generate the final submit command.</div>
+                        <label for="feeTxid">Transaction ID:</label>
+                        <p>Paste the resulting transaction id to move to the next step.</p>
                         <input type="text" class="form-control" id="feeTxid" value="" placeholder="<fee-txid>">
                     </div>
 
@@ -464,13 +464,13 @@
         </div>
         <div id="step3" class="tab-pane fade">
           <div class="proposalBlock">
-            <div class="row walletCommands hidden" id="walletCommandsProgress">
+            <div class="row walletCommands hidden" id="walletCommandsProgress" style="margin-top:0em">
 
                 <div class="col-xs-12">
 
                     <div class="form-group">
-                        <label for="feeTxid">Fee Transaction Progress:</label>
-                        <div id="progresstxt">We'll wait for 6 confirmations. Waiting for new blocks to confirm...</div>
+                        <label for="feeTxid">Confirm Transaction:</label>
+                        <p id="progresstxt">Waiting for 6 block confirmations, this should take approximately 15 minutes in total.</p>
                         <div id="progressbar"></div>
                     </div>
 
@@ -481,14 +481,15 @@
         </div>
         <div id="step4" class="tab-pane fade">
           <div class="proposalBlock">
-            <div class="row walletCommands hidden" id="walletCommandsSubmit">
+            <div class="row walletCommands hidden" id="walletCommandsSubmit" style="margin-top:0em;">
 
                 <div class="col-xs-12">
 
                     <div class="form-group">
-                        <label for="submitProposal">Submit Proposal Command:</label>
-                        <div>Paste the Fee TX id to generate the proposal submit command.  This is the final step and can be completed after 6 confirmations on the fee tx.</div>
+                        <label for="submitProposal">Submit Proposal:</label>
+                        <p>Paste the following into your wallet console to submit your Proposal. </p>
                         <textarea readonly class="form-control" id="submitProposal" rows="4" placeholder=""></textarea>
+			<p style="margin-top: 1em;">This is the last step, you will receive your unique Proposal ID as output.</p>
                     </div>
 
                 </div>
