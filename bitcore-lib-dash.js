@@ -3560,12 +3560,8 @@ GovObject.prototype._verifyPayment = function(payment) {
     return Boolean((parsedPayment <= 0));
 };
 
-GovObject.prototype._verifyAddress = function(address) {
-    return address.length > 26;
-    // - disable full check until checksum bug in Ubuntu Firefox is fixed
-
-    // var validAddress = Address.isValid(address, network);
-    // return validAddress;
+GovObject.prototype._verifyAddress = function(address, network) {
+    return Address.isValid(address, network);
 };
 
 GovObject.prototype._verifyUrl = function(url) {
@@ -3611,7 +3607,7 @@ Proposal.prototype.dataHex = function() {
     var _govObj = {
         end_epoch: this.end_epoch,
         name: this.name,
-        payment_address: this.payment_address,
+        payment_address: this.payment_address.trim(),
         payment_amount: this.payment_amount,
         start_epoch: this.start_epoch,
         type: this.type,
@@ -3728,8 +3724,8 @@ Proposal.prototype.getSerializationError = function(opts) {
         return new errors.GovObject.Proposal.invalidDateWindow();
     }
 
-    // verify address (only verifies length > 26)
-    if (!this._verifyAddress(this.payment_address)) {
+    // verify address
+    if (!this._verifyAddress(this.payment_address, this.network)) {
         return new errors.GovObject.Proposal.invalidAddress();
     }
 
