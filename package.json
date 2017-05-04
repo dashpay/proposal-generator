@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/snogcel/dash-govobject-service.git"
+    "url": "git+https://github.com/dashevo/govobject-proposal.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/snogcel/dash-govobject-service/issues"
+    "url": "https://github.com/dashevo/govobject-proposal/issues"
   },
-  "homepage": "https://github.com/snogcel/dash-govobject-service#readme"
+  "homepage": "https://github.com/dashevo/govobject-proposal#readme"
 }
