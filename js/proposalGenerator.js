@@ -5,10 +5,10 @@ function ProposalGenerator(gov) {
     this.gov = gov;
 
     // proposal basic fields
-    this.gov.name = $('#name').val();
-    this.gov.url = $('#url').val();
-    this.gov.payment_address = $('#payment_address').val();
-    this.gov.payment_amount = $('#payment_amount').val();
+    this.gov.name = $('#name').val().trim();
+    this.gov.url = $('#url').val().trim();
+    this.gov.payment_address = $('#payment_address').val().trim();
+    this.gov.payment_amount = $('#payment_amount').val().trim();
     this.gov.start_epoch = $('#start_epoch').val();
     this.gov.end_epoch = $('#end_epoch').val();
 
