@@ -128,7 +128,7 @@ $(document).ready(function() {
 
         var proposal = new ProposalGenerator(gov);
 
-        var transaction = $(this).val();
+        var transaction = $(this).val().trim();
         var txListener = new TXListener(socket, paymentCycle.provider, paymentCycle.prefix, transaction);
 
         // check if tx exists in insight
@@ -169,8 +169,8 @@ $(document).ready(function() {
                     $('#step_four').removeClass('hidden');
                     document.getElementsByClassName('progress-bar')[0].style.width = "100%";
                     document.getElementsByClassName('progress-bar')[0].innerText = "Proposal ready for submission";
-                    console.log($('#feeTxid').val());
-                    var submitCommand = "gobject submit " + $('#parentHash').val() + " " + $('#revision').val() + " " + $('#time').val() + " " + proposal.gov.serialize() + " " + $('#feeTxid').val();
+                    console.log($('#feeTxid').val().trim());
+                    var submitCommand = "gobject submit " + $('#parentHash').val() + " " + $('#revision').val() + " " + $('#time').val() + " " + proposal.gov.serialize() + " " + $('#feeTxid').val().trim();
                     console.log(submitCommand);
                     $('textarea#submitProposal').val(submitCommand);
                 }); // callback issued after tx confirmations >= 6
