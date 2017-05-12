@@ -12,6 +12,10 @@ if [ "$DEPLOY_ENV" = "production" ]; then
     --exclude .git \
     --exclude .gitignore \
     --exclude .travis.yml \
+    --exclude node_modules \
+    --exclude README.md \
+    --exclude package.json \
+    --exclude scripts \
     --delete-after \
     . deploy@proposal.dash.org:/var/www/govobject-proposal/
 fi
