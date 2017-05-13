@@ -5,6 +5,9 @@ set -ex
 DEPLOY_ENV="$1"
 # echo $TRAVIS_BUILD_DIR
 
+cat -e /tmp/deploy_ed25519
+env
+
 # TODO: staging environment
 if [ "$DEPLOY_ENV" = "production" ]; then
   rsync -vzrlptD \
