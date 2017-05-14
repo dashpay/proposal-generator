@@ -29,7 +29,7 @@ deploy:
   # deploy master to the staging/test environment
   - provider: script
     skip_cleanup: true
-    script: scripts/deploy.sh staging
+    script: /bin/bash scripts/deploy.sh staging
     on:
       branch: master
       node: 'node'
@@ -37,7 +37,7 @@ deploy:
   # deploy release to the production environment
   - provider: script
     skip_cleanup: true
-    script: scripts/deploy.sh production
+    script: /bin/bash scripts/deploy.sh production
     on:
       branch: release
       node: 'node'
