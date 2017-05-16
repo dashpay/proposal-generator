@@ -27,6 +27,26 @@
 
     <script src="https://insight.dash.org:443/socket.io/socket.io.js"></script>
     <script src="vendor/index.js"></script>
+    <script>
+        function displayError(errorType){
+            var errorMessage = "Unknown issue.";
+            if(errorType){
+                switch (errorType){
+                    case "missing_build":
+                        errorMessage="Missing file : vendor/index.js. Did you run `npm run build` ?";
+                        break;
+                    default:
+                        break;
+                }
+                document.getElementsByClassName('progress-bar')[0].style.width = "100%";
+                document.getElementsByClassName('progress-bar')[0].style.background = "red";
+                document.getElementsByClassName('progress-bar')[0].innerText = errorMessage;
+            }
+        }
+        $(document).ready(function() {
+            typeof(_bitcore) !== "undefined" || displayError('missing_build')
+        });
+    </script>
 </head>
 <body>
 
