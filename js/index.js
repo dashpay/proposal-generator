@@ -24,7 +24,6 @@ var init = function(network, provider, prefix) {
 
     socket.on('disconnect', function() {
         console.log('connection lost');
-        alert('We sorry; connection lost.');
     });
 
     return gov;
