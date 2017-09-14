@@ -3,11 +3,11 @@ var Bitcore = require('bitcore-lib-dash');
 var socket;
 var paymentCycle;
 
-var mainnetProvider = 'https://insight.dash.org:443';
-var mainnetPrefix = '/api';
+var mainnetProvider = 'https://insight.dashevo.org';
+var mainnetPrefix = '/insight-api-dash';
 
-var testnetProvider = 'https://test-insight.dash.org:443';
-var testnetPrefix = '/api';
+var testnetProvider = 'https://testnet-insight.dashevo.org';
+var testnetPrefix = '/insight-api-dash';
 
 var init = function(network, provider, prefix) {
     var gov = new Bitcore.GovObject.Proposal();
@@ -24,7 +24,6 @@ var init = function(network, provider, prefix) {
 
     socket.on('disconnect', function() {
         console.log('connection lost');
-        alert('We sorry; connection lost.');
     });
 
     return gov;
