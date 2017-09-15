@@ -1,4 +1,4 @@
-# govobject-proposal
+# Dash Proposal Generator
 
 ## Get Started
 
