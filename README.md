@@ -1,5 +1,7 @@
 # Dash Proposal Generator
 
+[![Build Status](https://travis-ci.org/dashevo/proposal-generator.svg?branch=master)](https://travis-ci.org/dashevo/proposal-generator)
+
 ## Get Started
 
 Before being able to use this repository.  
