@@ -2,19 +2,15 @@
 
 set -ex
 
-DEPLOY_ENV="$1"
-# echo $TRAVIS_BUILD_DIR
+if [ "x${S3_BUCKET}" = "x" ]; then
+  echo "error: S3_BUCKET must be set"
+  exit 1
+fi
+S3_PREFIX="${S3_PREFIX%/}"  # ensure any trailing slash removed
 
-# TODO: staging environment
+DEPLOY_ENV="$1"
 if [ "$DEPLOY_ENV" = "production" ]; then
-  rsync -vzrlptD \
-    --exclude .git \
-    --exclude .gitignore \
-    --exclude .travis.yml \
-    --exclude node_modules \
-    --exclude README.md \
-    --exclude package.json \
-    --exclude scripts \
-    --delete-after \
-    . deploy@proposal.dash.org:/var/www/govobject-proposal/
+  aws s3 sync --delete --size-only --acl private \
+    dist/ "s3://${S3_BUCKET}/${S3_PREFIX}/" \
+    --exclude 'dist/.DS_Store'
 fi
