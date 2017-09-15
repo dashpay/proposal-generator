@@ -50,3 +50,6 @@ dashpay/client/node_modules
 /client/dashpay-spa/node_modules/
 # Generated browserify build 
 vendor/index.js
+
+# vars defined in .env
+.env
