@@ -1,6 +1,6 @@
 function ProposalGenerator(gov) {
     this._mode = 'proposal';
-    if(!gov.network) gov.network = 'livenet';
+    if (!gov.network) gov.network = 'livenet';
 
     this.gov = gov;
 
@@ -22,7 +22,7 @@ ProposalGenerator.prototype.validate = function() {
     }
     catch (e) {
 
-        switch(e.message) {
+        switch (e.message) {
 
             case 'Invalid Name':
                 console.log("error: invalid name");
@@ -63,6 +63,12 @@ ProposalGenerator.prototype.validate = function() {
                 $('#payment_address').val("Invalid payment address.");
                 break;
 
+            case 'Invalid P2SHAddress':
+                console.log("Error: invalid address - multisig not supported");
+                $('#payment_address').addClass('validationError');
+                $('#payment_address').val("Invalid payment address - multisig not supported.");
+                break;
+
             default:
                 console.log(e);
                 break;
@@ -77,11 +83,11 @@ ProposalGenerator.prototype.validate = function() {
 ProposalGenerator.prototype.walletCommands = function() {
     var gov = this.gov;
 
-    var prepCommand = "gobject prepare "+$('#parentHash').val() + " " + $('#revision').val() +" " + $('#time').val() +" " + gov.serialize();
+    var prepCommand = "gobject prepare " + $('#parentHash').val() + " " + $('#revision').val() + " " + $('#time').val() + " " + gov.serialize();
     console.log(prepCommand);
     $("textarea#prepareProposal").val(prepCommand);
 
-    if(this._mode == 'proposal') {
+    if (this._mode == 'proposal') {
         setFormEditable(true);
 
         $('.walletCommands#walletCommandsHeader').removeClass('hidden');
@@ -98,7 +104,7 @@ ProposalGenerator.prototype.createProposal = function() {
     $('#feeTxid').val("");
     $('#submitProposal').val("");
 
-    if(this._mode == 'command') {
+    if (this._mode == 'command') {
         setFormEditable(false);
 
         $('.walletCommands#walletCommandsHeader').addClass('hidden');
