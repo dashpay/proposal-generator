@@ -63,6 +63,12 @@ ProposalGenerator.prototype.validate = function() {
                 $('#payment_address').val("Invalid payment address.");
                 break;
 
+            case 'Invalid P2SHAddress':
+                console.log("Error: invalid address - multisig not supported");
+                $('#payment_address').addClass('validationError');
+                $('#payment_address').val("Invalid payment address - multisig not supported.");
+                break;
+
             default:
                 console.log(e);
                 break;
