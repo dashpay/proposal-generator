@@ -12,8 +12,8 @@ before_install:
 install:
   - bash scripts/build.sh
 
-# ensure dist/ exists, meaning site was built
-script: test -d dist/
+script:
+  - test -d dist/  # ensure dist/ exists, meaning site was built
 
 deploy:
   # deploy release to s3 bucket
