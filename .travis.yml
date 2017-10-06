@@ -13,7 +13,6 @@ install:
   - bash scripts/build.sh
 
 script:
-  - npm run linebreak-check
   - test -d dist/  # ensure dist/ exists, meaning site was built
 
 deploy:

@@ -8,6 +8,7 @@ WORKDIR /app
 COPY . /app/
 
 RUN npm install --quiet
+RUN npm run linebreak-check
 RUN npm run build
 
 CMD /bin/ash
