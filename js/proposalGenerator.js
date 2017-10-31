@@ -8,9 +8,10 @@ function ProposalGenerator(gov) {
     this.gov.name = $('#name').val().trim();
     this.gov.url = $('#url').val().trim();
     this.gov.payment_address = $('#payment_address').val().trim();
-    this.gov.payment_amount = $('#payment_amount').val().trim();
-    this.gov.start_epoch = $('#start_epoch').val();
-    this.gov.end_epoch = $('#end_epoch').val();
+    this.gov.payment_amount = parseFloat($('#payment_amount').val().trim());
+    this.gov.start_epoch = parseInt($('#start_epoch').val());
+    this.gov.end_epoch = parseInt($('#end_epoch').val());
+
 
     // hidden elements
     this.gov.type = parseInt($('#type').val());
