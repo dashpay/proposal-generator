@@ -32,7 +32,7 @@ var init = function(network, provider, prefix) {
 var updateTotal = function() {
     paymentCycle.selectedPeriods = $('#end_epoch').find(':selected').data('index');
 
-    var payment_amount = parseInt($('#payment_amount').val());
+    var payment_amount = parseFloat($('#payment_amount').val());
     if (isNaN(payment_amount)) payment_amount = 0;
 
     var periods = parseInt((paymentCycle.selectedPeriods+1)-paymentCycle.selectedStartIndex);
@@ -59,6 +59,12 @@ $(document).ready(function() {
 
     $('#end_epoch').change(function() {
         updateTotal();
+    });
+    
+    $('#payment_amount').on('input',function(){
+      //As of now, core doesn't handle comma, but handle dots. Therefore we change it to the user.
+      var payment_amount_value = $('#payment_amount').val();
+      $('#payment_amount').val(payment_amount_value.replace(/,/g, '.'));
     });
 
     $('#payment_amount').change(function() {
