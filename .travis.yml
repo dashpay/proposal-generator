@@ -6,14 +6,16 @@ python:
 
 before_install:
   - pip install -U pip awscli
-  - aws configure set region $AWS_REGION
-  - aws configure set preview.cloudfront true
 
 install:
   - bash scripts/build.sh
 
 script:
   - test -d dist/  # ensure dist/ exists, meaning site was built
+
+before_deploy:
+  - aws configure set region $AWS_REGION
+  - aws configure set preview.cloudfront true
 
 deploy:
   # deploy release to s3 bucket
