@@ -5,9 +5,12 @@ RUN apk add --update --no-cache git
 
 WORKDIR /app
 
-COPY . /app/
+COPY package.json /app/
 
 RUN npm install --quiet
+
+COPY . /app/
+
 RUN npm run linebreak-check
 RUN npm run build
 
