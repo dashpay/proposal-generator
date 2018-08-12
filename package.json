@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/browserify js/index.js > ./vendor/index.js",
-    "linebreak-check": "./node_modules/.bin/eslint --rule 'linebreak-style: [\"error\", \"unix\"]' js/"
+    "build": "browserify js/index.js > ./vendor/index.js",
+    "linebreak-check": "eslint --rule 'linebreak-style: [\"error\", \"unix\"]' js/"
   },
   "repository": {
     "type": "git",
