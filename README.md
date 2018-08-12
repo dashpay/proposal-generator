@@ -1,6 +1,4 @@
-# Dash Proposal Generator
-
-[![Build Status](https://travis-ci.org/dashevo/proposal-generator.svg?branch=master)](https://travis-ci.org/dashevo/proposal-generator)
+# ANON Proposal Generator
 
 ## Get Started
 
@@ -20,3 +18,5 @@ A Dockerfile has been included in order to build the site deterministically, as 
 ```
 bash scripts/build.sh
 ```
+
+Credit: https://github.com/dashevo 
