@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/dashevo/proposal-generator#readme",
   "devDependencies": {
-    "bitcore-lib-dash": "^0.15.0",
+    "@anonymousbitcoin/anoncore-lib": "^0.15.7",
     "browserify": "^14.3.0",
     "eslint": "^4.8.0"
   }

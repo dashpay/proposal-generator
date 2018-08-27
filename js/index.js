@@ -1,4 +1,4 @@
-var Bitcore = require('bitcore-lib-dash');
+var Bitcore = require('@anonymousbitcoin/anoncore-lib');
 
 var socket;
 var paymentCycle;
