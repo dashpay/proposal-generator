@@ -4,23 +4,27 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "npm install && npm run build && open index.html",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "browserify js/index.js > ./vendor/index.js",
     "linebreak-check": "eslint --rule 'linebreak-style: [\"error\", \"unix\"]' js/"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dashevo/proposal-generator.git"
+    "url": "git+https://github.com/anonymousbitcoin/proposal-generator.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/dashevo/proposal-generator/issues"
+    "url": "https://github.com/anonymousbitcoin/proposal-generator/issues"
   },
-  "homepage": "https://github.com/dashevo/proposal-generator#readme",
+  "homepage": "https://github.com/anonymousbitcoin/proposal-generator#readme",
   "devDependencies": {
     "@anonymousbitcoin/anoncore-lib": "^0.15.7",
     "browserify": "^14.3.0",
     "eslint": "^4.8.0"
+  },
+  "engines": {
+    "node": "10.4.0"
   }
 }
