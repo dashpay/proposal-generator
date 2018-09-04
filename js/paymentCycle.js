@@ -43,12 +43,10 @@ function PaymentCycle(gov, provider, prefix) {
         }
     };
 
-    self.updateDropdowns();
     this.getInfo(function(err, res) {
         self.blockHeight = res.info.blocks;
-        console.log("current blockheight: " + self.blockHeight);
 
-        // self.updateDropdowns();
+        self.updateDropdowns();
     });
 }
 
@@ -145,23 +143,14 @@ PaymentCycle.prototype.updateDropdowns = function() {
 
     var start_epoch = $("#start_epoch");
     start_epoch.find('option').remove();
-    var startEpochArray = [{superblock: 1, timestamp: 1535852427687, before: 1534564687687, after: 1537140167687, label: "9/1/2018"}, {superblock: 947112, timestamp: 1538427907689, before: 1537140167689, after: 1539715647689, label: "10/1/2018"}, {superblock: 963728, timestamp: 1541003387689, before: 1539715647689, after: 1542291127689, label: "10/31/2018"}, {superblock: 980344, timestamp: 1543578867689, before: 1542291127689, after: 1544866607689, label: "11/30/2018"}]
-    startEpochArray.forEach(function(val, index) {
-        var eta = self.getTimeDifference(opts, now, val.timestamp);
-        var time = val.timestamp - now;
-        var option = $("<option />").val((Math.floor(val.before / 1000))).text(val.label).attr('data-index', index).attr('data-time', time).attr('data-eta', eta).attr('data-block', val.superblock);
+
+    $.each(this.startDate, function(index) {
+        var eta = self.getTimeDifference(opts, now, this.timestamp);
+        var time = this.timestamp - now;
+        var option = $("<option />").val((Math.floor(this.before / 1000))).text(this.label).attr('data-index', index).attr('data-time', time).attr('data-eta', eta).attr('data-block', this.superblock);
         start_epoch.append(option);
 
     });
-
-    // $.each(this.startDate, function(index) {
-    //     console.log(this);
-    //     var eta = self.getTimeDifference(opts, now, this.timestamp);
-    //     var time = this.timestamp - now;
-    //     var option = $("<option />").val((Math.floor(this.before / 1000))).text(this.label).attr('data-index', index).attr('data-time', time).attr('data-eta', eta).attr('data-block', this.superblock);
-    //     start_epoch.append(option);
-
-    // });
 
     self.updateEndEpoch();
 

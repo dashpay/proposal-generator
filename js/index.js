@@ -3,11 +3,11 @@ var Bitcore = require('@anonymousbitcoin/anoncore-lib');
 var socket;
 var paymentCycle;
 
-var mainnetProvider = '';
-var mainnetPrefix = '';
+var mainnetProvider = 'http://texplorer.anonfork.io/';
+var mainnetPrefix = 'insight';
 
-var testnetProvider = '';
-var testnetPrefix = '';
+var testnetProvider = 'http://texplorer.anonfork.io/';
+var testnetPrefix = 'insight';
 
 var init = function(network, provider, prefix) {
     var gov = new Bitcore.GovObject.Proposal();
@@ -15,16 +15,16 @@ var init = function(network, provider, prefix) {
 
     paymentCycle = new PaymentCycle(gov, provider, prefix);
 
-    // socket = io(provider);
+    socket = io(provider);
 
-    // socket.on('connect', function() {
-    //     socket.emit('subscribe', 'inv');
-    //     console.log("socket.io initialized...");
-    // });
+    socket.on('connect', function() {
+        socket.emit('subscribe', 'inv');
+        console.log("socket.io initialized...");
+    });
 
-    // socket.on('disconnect', function() {
-    //     console.log('connection lost');
-    // });
+    socket.on('disconnect', function() {
+        console.log('connection lost');
+    });
 
     return gov;
 };
@@ -137,26 +137,26 @@ $(document).ready(function() {
         var txListener = new TXListener(socket, paymentCycle.provider, paymentCycle.prefix, transaction);
 
         // check if tx exists in insight
-        // txListener.getTx(function(err, res) {
-            // if(err) {
-            //     console.log("Error:", err);
-            //     if(err == 404) {
-            //         $('#feeTxid').addClass('validationError');
-            //         $('#feeTxid').val('Transaction ID not found');
-            //         $('#error_modal').modal('show');
-            //         $('#error_text').text('Proposal transaction ID not found');
-            //     } else if (err == 400) {
-            //         $('#feeTxid').addClass('validationError');
-            //         $('#feeTxid').val('Please paste a valid transaction ID');
-            //         $('#error_modal').modal('show');
-            //         $('#error_text').text('Please paste a valid transaction ID');
-            //     }
+        txListener.getTx(function(err, res) {
+            if(err) {
+                console.log("Error:", err);
+                if(err == 404) {
+                    $('#feeTxid').addClass('validationError');
+                    $('#feeTxid').val('Transaction ID not found');
+                    $('#error_modal').modal('show');
+                    $('#error_text').text('Proposal transaction ID not found');
+                } else if (err == 400) {
+                    $('#feeTxid').addClass('validationError');
+                    $('#feeTxid').val('Please paste a valid transaction ID');
+                    $('#error_modal').modal('show');
+                    $('#error_text').text('Please paste a valid transaction ID');
+                }
 
-            // }
-            // if(res) {
-                // console.log("Response:", res);
+            }
+            if(res) {
+                console.log("Response:", res);
 
-                // transaction exists, proceed to step three
+        //         transaction exists, proceed to step three
                 document.getElementById('step_three').click();
                 $('#step_three').removeClass('hidden');
                 document.getElementsByClassName('progress-bar')[0].style.width = "75%";
@@ -168,7 +168,7 @@ $(document).ready(function() {
                 txListener.blockheight = 19//res.blockheight;
                 txListener.confirmations = 10//res.confirmations;
 
-                // txListener.initSocket(function() {
+                txListener.initSocket(function() {
                     $('#walletCommandsSubmit').removeClass('hidden');
                     document.getElementById('step_four').click();
                     $('#step_four').removeClass('hidden');
@@ -178,9 +178,9 @@ $(document).ready(function() {
                     var submitCommand = "gobject submit " + $('#parentHash').val() + " " + $('#revision').val() + " " + $('#time').val() + " " + proposal.gov.serialize() + " " + $('#feeTxid').val().trim();
                     console.log(submitCommand);
                     $('textarea#submitProposal').val(submitCommand);
-                // }); //  callback issued after tx confirmations >= 6
+                }); //  callback issued after tx confirmations >= 6
 
-            // }
-        // });
+            }
+        });
     });
 });
