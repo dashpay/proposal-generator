@@ -4,10 +4,10 @@ var socket;
 var paymentCycle;
 
 var mainnetProvider = 'http://texplorer.anonfork.io/';
-var mainnetPrefix = 'insight';
+var mainnetPrefix = 'insight-api-anon';
 
 var testnetProvider = 'http://texplorer.anonfork.io/';
-var testnetPrefix = 'insight';
+var testnetPrefix = 'insight-api-anon';
 
 var init = function(network, provider, prefix) {
     var gov = new Bitcore.GovObject.Proposal();
