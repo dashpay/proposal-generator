@@ -3,7 +3,7 @@ var Bitcore = require('@anonymousbitcoin/anoncore-lib');
 var socket;
 var paymentCycle;
 
-var mainnetProvider = 'http://texplorer.anonfork.io/';
+var mainnetProvider = 'http://explorer.anonfork.io/';
 var mainnetPrefix = 'insight-api-anon';
 
 var testnetProvider = 'http://texplorer.anonfork.io/';
