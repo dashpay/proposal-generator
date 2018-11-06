@@ -3,10 +3,10 @@ var Bitcore = require('@anonymousbitcoin/anoncore-lib');
 var socket;
 var paymentCycle;
 
-var mainnetProvider = 'http://explorer.anonfork.io/';
+var mainnetProvider = 'https://explorer.anonfork.io/';
 var mainnetPrefix = 'insight-api-anon';
 
-var testnetProvider = 'http://texplorer.anonfork.io/';
+var testnetProvider = 'https://explorer.anonfork.io/';
 var testnetPrefix = 'insight-api-anon';
 
 var init = function(network, provider, prefix) {

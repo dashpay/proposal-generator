@@ -10,9 +10,9 @@ function PaymentCycle(gov, provider, prefix) {
     this.network = gov.network;
     this.provider = provider;
     this.prefix = prefix;
-    this.paymentCycle = 16616;
-    this.proposalMaturity = 1662; // ~(60*24*3)/2.6 = about three days
-    this.budgetCycles = 24;
+    this.paymentCycle = 4320;
+    this.proposalMaturity = 432; // ~(60*24*3)/10 = about three days
+    this.budgetCycles = 99;
 
     this.selectedStartIndex = 0;
     this.selectedPeriods = 1;
@@ -58,7 +58,7 @@ PaymentCycle.prototype.getBlockTimestamp = function(block) {
     var blocks = block - this.blockHeight;
     var now = Math.floor(Date.now());
 
-    return (now + (blocks * (155 * 1000))); // 155 seconds per block x 1000 = ms per block
+    return (now + (blocks * (600 * 1000))); // 155 seconds per block x 1000 = ms per block
 };
 
 PaymentCycle.prototype.getTimeDifference = function(opts, start, end) {
@@ -147,7 +147,7 @@ PaymentCycle.prototype.updateDropdowns = function() {
     $.each(this.startDate, function(index) {
         var eta = self.getTimeDifference(opts, now, this.timestamp);
         var time = this.timestamp - now;
-        var option = $("<option />").val((Math.floor(this.before / 1000))).text(this.label).attr('data-index', index).attr('data-time', time).attr('data-eta', eta).attr('data-block', this.superblock);
+        var option = $("<option />").val((Math.floor(this.before))).text(this.label).attr('data-index', index).attr('data-time', time).attr('data-eta', eta).attr('data-block', this.superblock);
         start_epoch.append(option);
 
     });
@@ -178,7 +178,7 @@ PaymentCycle.prototype.updateEndEpoch = function() {
             var eta = self.getTimeDifference(opts, self.startDate[self.selectedStartIndex].timestamp, this.timestamp);
             var time = this.timestamp - self.startDate[self.selectedStartIndex].timestamp;
 
-            var option = $("<option />").val((Math.floor(this.after / 1000))).text((i+" "+payments)).attr('data-index', index).attr('data-label', this.label).attr('data-time', time).attr('data-eta', eta).attr('data-block', this.superblock);
+            var option = $("<option />").val((Math.floor(this.after))).text((i+" "+payments)).attr('data-index', index).attr('data-label', this.label).attr('data-time', time).attr('data-eta', eta).attr('data-block', this.superblock);
             end_epoch.append(option);
 
             i++;

@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/anonymousbitcoin/proposal-generator#readme",
   "devDependencies": {
-    "@anonymousbitcoin/anoncore-lib": "^0.15.7",
+    "@anonymousbitcoin/anoncore-lib": "github:anonymousbitcoin/bitcore-lib-anon#feature/governance",
     "browserify": "^14.3.0",
     "eslint": "^4.8.0"
   },
