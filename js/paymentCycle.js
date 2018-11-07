@@ -108,8 +108,6 @@ PaymentCycle.prototype.updateDropdowns = function() {
         var superblock = this.getNextSuperblock(blockHeight);
         var timestamp = this.getBlockTimestamp(superblock);
 
-        console.log("ndfkgbajkndfgjhvkabfgad", superblock, now, future);
-
         var before = now;//this.getBlockTimestamp((superblock - this.paymentCycle/2)); // set start_epoch to halfway before superblock (superblock-(this.paymentCycle/2))
         var after = future; // this.getBlockTimestamp((superblock + this.paymentCycle/2)); // set end_epoch to halfway after superblock
 
