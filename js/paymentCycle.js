@@ -113,7 +113,7 @@ PaymentCycle.prototype.updateDropdowns = function() {
 
         var votingDeadline = this.getBlockTimestamp((superblock-this.proposalMaturity)); // if superblock is within ~3 days skip to the next one
 
-        var label = new Date(timestamp).toLocaleDateString();
+        var label = new Date(future).toLocaleDateString();
         if (this.network == 'testnet') label += " @ " + new Date(timestamp).toLocaleTimeString();
 
         var superblockDate = {
