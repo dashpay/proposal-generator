@@ -111,10 +111,10 @@ PaymentCycle.prototype.updateDropdowns = function() {
         var before = now;//this.getBlockTimestamp((superblock - this.paymentCycle/2)); // set start_epoch to halfway before superblock (superblock-(this.paymentCycle/2))
         var after = future; // this.getBlockTimestamp((superblock + this.paymentCycle/2)); // set end_epoch to halfway after superblock
 
-        var votingDeadline = this.getBlockTimestamp((superblock-this.proposalMaturity)); // if superblock is within ~3 days skip to the next one
+        var votingDeadline = future;// this.getBlockTimestamp((superblock-this.proposalMaturity)); // if superblock is within ~3 days skip to the next one
 
         var label = new Date(future).toLocaleDateString();
-        if (this.network == 'testnet') label += " @ " + new Date(timestamp).toLocaleTimeString();
+        if (this.network == 'testnet') label += " @ " + new Date(future).toLocaleTimeString();
 
         var superblockDate = {
             superblock: superblock,
@@ -145,6 +145,7 @@ PaymentCycle.prototype.updateDropdowns = function() {
 
     var start_epoch = $("#start_epoch");
     start_epoch.find('option').remove();
+
 
     $.each(this.startDate, function(index) {
         var eta = self.getTimeDifference(opts, now, this.timestamp);
