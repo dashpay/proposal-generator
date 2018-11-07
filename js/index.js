@@ -6,7 +6,7 @@ var paymentCycle;
 var mainnetProvider = 'https://explorer.anonfork.io/';
 var mainnetPrefix = 'insight-api-anon';
 
-var testnetProvider = 'https://explorer.anonfork.io/';
+var testnetProvider = 'https://texplorer.anonfork.io/';
 var testnetPrefix = 'insight-api-anon';
 
 var init = function(network, provider, prefix) {
