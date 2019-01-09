@@ -101,7 +101,10 @@ $(document).ready(function() {
 
         var validProposal = proposal.validate();
 
-        if (validProposal) {
+	console.log('proposal below: ');
+	console.log(proposal);
+        
+	if (validProposal) {
             document.getElementById('step_two').click();
             $('#step_two').removeClass('hidden');
             document.getElementsByClassName('progress-bar')[0].style.width = "50%";
@@ -165,8 +168,8 @@ $(document).ready(function() {
                 $('#walletCommandsProgress').removeClass('hidden'); // probably a better way to do this....
                 $("#progressbar").progressbar({value: 0}); // TXListener will bump this along as confirmations occur
 
-                txListener.blockheight = 19//res.blockheight;
-                txListener.confirmations = 10//res.confirmations;
+                txListener.blockheight = res.blockheight;
+                txListener.confirmations = res.confirmations;
 
                 txListener.initSocket(function() {
                     $('#walletCommandsSubmit').removeClass('hidden');

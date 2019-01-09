@@ -17,8 +17,8 @@ function PaymentCycle(gov, provider, prefix) {
     this.selectedStartIndex = 0;
     this.selectedPeriods = 1;
 
-    if (this.network == 'testnet') this.paymentCycle = 23;
-    if (this.network == 'testnet') this.proposalMaturity = 24; // a little more than one hour
+    if (this.network == 'testnet') this.paymentCycle = 10;
+    if (this.network == 'testnet') this.proposalMaturity = 1; // a little more than one hour
     if (this.network == 'testnet') this.budgetCycles = 99;
 
     this.blockHeight = 0;
@@ -100,21 +100,19 @@ PaymentCycle.prototype.updateDropdowns = function() {
 
     var blockHeight = this.blockHeight;
     var now = Math.floor(Date.now());
-    var future = new Date();
-    future.setDate(future.getDate() + 30);
 
-    // for (i = 0; i < this.budgetCycles + 1; i++) {
+    for (i = 0; i < this.budgetCycles + 1; i++) {
 
         var superblock = this.getNextSuperblock(blockHeight);
         var timestamp = this.getBlockTimestamp(superblock);
 
-        var before = now;//this.getBlockTimestamp((superblock - this.paymentCycle/2)); // set start_epoch to halfway before superblock (superblock-(this.paymentCycle/2))
-        var after = future; // this.getBlockTimestamp((superblock + this.paymentCycle/2)); // set end_epoch to halfway after superblock
+        var before = this.getBlockTimestamp((superblock-(this.paymentCycle/2))); // set start_epoch to halfway before superblock
+        var after = this.getBlockTimestamp((superblock+(this.paymentCycle/2))); // set end_epoch to halfway after superblock
 
-        var votingDeadline = future;// this.getBlockTimestamp((superblock-this.proposalMaturity)); // if superblock is within ~3 days skip to the next one
+        var votingDeadline = this.getBlockTimestamp((superblock-this.proposalMaturity)); // if superblock is within ~3 days skip to the next one
 
-        var label = new Date(future).toLocaleDateString();
-        if (this.network == 'testnet') label += " @ " + new Date(future).toLocaleTimeString();
+        var label = new Date(timestamp).toLocaleDateString();
+        if (this.network == 'testnet') label += " @ " + new Date(timestamp).toLocaleTimeString();
 
         var superblockDate = {
             superblock: superblock,
@@ -132,7 +130,7 @@ PaymentCycle.prototype.updateDropdowns = function() {
 
         blockHeight = superblock;
 
-    // }
+    }
 
     // this.endDate.shift(); // remove first element of endDate
     // this.startDate.pop(); // remove last element of startDate to keep length even
@@ -146,11 +144,10 @@ PaymentCycle.prototype.updateDropdowns = function() {
     var start_epoch = $("#start_epoch");
     start_epoch.find('option').remove();
 
-
     $.each(this.startDate, function(index) {
         var eta = self.getTimeDifference(opts, now, this.timestamp);
         var time = this.timestamp - now;
-        var option = $("<option />").val((Math.floor(this.before/1000))).text(this.label).attr('data-index', index).attr('data-time', time).attr('data-eta', eta).attr('data-block', this.superblock);
+				var option = $("<option />").val((Math.floor(this.before/1000))).text(this.label).attr('data-index', index).attr('data-time', time).attr('data-eta', eta).attr('data-block', this.superblock);
         start_epoch.append(option);
 
     });
@@ -199,3 +196,4 @@ PaymentCycle.prototype.getInfo = function(cb) {
         cb(null, data);
     });
 };
+
