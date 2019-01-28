@@ -11,7 +11,7 @@ function PaymentCycle(gov, provider, prefix) {
     this.provider = provider;
     this.prefix = prefix;
     this.paymentCycle = 4380;
-    this.proposalMaturity = 864; // ~(60*24*3)/10 = about three days
+    this.proposalMaturity = 432; // ~(60*24*3)/10 = about three days
     this.budgetCycles = 23;
     this.selectedStartIndex = 0;
     this.selectedPeriods = 1;
@@ -110,6 +110,9 @@ PaymentCycle.prototype.updateDropdowns = function() {
 
 				console.log('before: ', before);
 				console.log('without minus', this.getBlockTimestamp(superblock));
+				console.log('after with minus', this.getBlockTimestamp((superblock+this.paymentCycle)));
+				console.log('after with minus / 2', this.getBlockTimestamp((superblock+this.paymentCycle/2)));
+
         var votingDeadline = this.getBlockTimestamp((superblock-this.proposalMaturity)); // if superblock is within ~3 days skip to the next one
 
         var label = new Date(timestamp).toLocaleDateString();
