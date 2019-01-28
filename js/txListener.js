@@ -24,10 +24,10 @@ TXListener.prototype.initSocket = function(cb) {
             //self.confirmations = (res.height - self.blockheight) + 1; // compare blockHeight against transaction blockHeight
             confirmations++;
 
-            if (confirmations >= 2) {
+            if (confirmations >= 6) {
               cb();
             };
-            $("#progressbar").progressbar({value: ((100 / 2) * confirmations)});
+            $("#progressbar").progressbar({value: ((100 / 6) * confirmations)});
 
             console.log('confirmations: ' + confirmations);
 

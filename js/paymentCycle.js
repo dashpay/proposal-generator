@@ -10,10 +10,9 @@ function PaymentCycle(gov, provider, prefix) {
     this.network = gov.network;
     this.provider = provider;
     this.prefix = prefix;
-    this.paymentCycle = 4320;
+    this.paymentCycle = 4380;
     this.proposalMaturity = 432; // ~(60*24*3)/10 = about three days
-    this.budgetCycles = 99;
-
+    this.budgetCycles = 24;
     this.selectedStartIndex = 0;
     this.selectedPeriods = 1;
 
