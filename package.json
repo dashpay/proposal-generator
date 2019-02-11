@@ -21,6 +21,6 @@
   "devDependencies": {
     "@dashevo/dashcore-lib": "^0.16.8",
     "browserify": "^16.2.3",
-    "eslint": "^4.8.0"
+    "eslint": "^5.13.0"
   }
 }
