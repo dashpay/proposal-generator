@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/dashevo/proposal-generator#readme",
   "devDependencies": {
-    "bitcore-lib-dash": "^0.15.0",
+    "@dashevo/dashcore-lib": "^0.16.8",
     "browserify": "^14.3.0",
     "eslint": "^4.8.0"
   }
