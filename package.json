@@ -1,26 +1,26 @@
 {
-  "name": "govobject-proposal",
-  "version": "1.0.2",
+  "name": "proposal-generator",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/browserify js/index.js > ./vendor/index.js",
-    "linebreak-check": "./node_modules/.bin/eslint --rule 'linebreak-style: [\"error\", \"unix\"]' js/"
+    "build": "browserify js/index.js > ./vendor/index.js",
+    "linebreak-check": "eslint --rule 'linebreak-style: [\"error\", \"unix\"]' js/"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dashevo/govobject-proposal.git"
+    "url": "git+https://github.com/dashevo/proposal-generator.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/dashevo/govobject-proposal/issues"
+    "url": "https://github.com/dashevo/proposal-generator/issues"
   },
-  "homepage": "https://github.com/dashevo/govobject-proposal#readme",
+  "homepage": "https://github.com/dashevo/proposal-generator#readme",
   "devDependencies": {
-    "bitcore-lib-dash": "^0.15.0",
-    "browserify": "^14.3.0",
-    "eslint": "^4.8.0"
+    "@dashevo/dashcore-lib": "^0.16.8",
+    "browserify": "^16.2.3",
+    "eslint": "^5.13.0"
   }
 }
