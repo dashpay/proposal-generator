@@ -1,4 +1,4 @@
-FROM node:10-alpine
+FROM node:12-alpine
 
 # update package index and install git
 RUN apk add --update --no-cache git
