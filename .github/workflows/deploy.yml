@@ -1,0 +1,39 @@
+name: Deploy release to S3 bucket
+
+on:
+  push:
+    branches:    
+      - 'release'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy release
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: release
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Build
+        run: bash scripts/build.sh
+  
+      - name: Deploy
+        uses: reggionick/s3-deploy@v3
+        with:
+          folder: ${{ secrets.S3_PREFIX }}
+          bucket: ${{ secrets.S3_BUCKET }}
+          bucket-region: ${{ secrets.AWS_REGION }}
+          dist-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+          invalidation: /
+          delete-removed: true
+          no-cache: true
+          private: true
