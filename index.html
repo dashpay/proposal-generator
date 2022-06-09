@@ -1,85 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
 
-    <title>Dash Budget Proposal Generator</title>
+  <title>Dash Budget Proposal Generator</title>
 
-    <link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
-    <script src="vendor/jquery/jquery-3.1.1.min.js"></script>
+  <script src="vendor/jquery/jquery-3.1.1.min.js"></script>
 
-    <link rel="stylesheet" href="vendor/jquery-ui/jquery-ui.min.css">
-    <script src="vendor/jquery-ui/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="vendor/jquery-ui/jquery-ui.min.css">
+  <script src="vendor/jquery-ui/jquery-ui.min.js"></script>
 
-    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
-    <script src="vendor/fontawesome/f0153b9f7b.js"></script>
+  <script src="vendor/fontawesome/f0153b9f7b.js"></script>
 
-    <link rel="stylesheet" href="css/master.css">
-    <script src="js/proposalGenerator.js"></script>
-    <script src="js/paymentCycle.js"></script>
-    <!-- <script src="js/transactionListener.js"></script> -->
-    <script src="js/txListener.js"></script>
-    <script src="js/formHandler.js"></script>
+  <link rel="stylesheet" href="css/master.css">
+  <script src="js/proposalGenerator.js"></script>
+  <script src="js/paymentCycle.js"></script>
+  <!-- <script src="js/transactionListener.js"></script> -->
+  <script src="js/txListener.js"></script>
+  <script src="js/formHandler.js"></script>
 
-    <script src="https://insight.dashevo.org/socket.io/socket.io.js"></script>
-    <script src="vendor/index.js"></script>
-    <script>
-        function displayError(errorType){
-            var errorMessage = "Unknown issue.";
-            if(errorType){
-                switch (errorType){
-                    case "missing_build":
-                        errorMessage="Missing file : vendor/index.js. Did you run `npm run build` ?";
-                        break;
-                    default:
-                        break;
-                }
-                document.getElementsByClassName('progress-bar')[0].style.width = "100%";
-                document.getElementsByClassName('progress-bar')[0].style.background = "red";
-                document.getElementsByClassName('progress-bar')[0].innerText = errorMessage;
-            }
+  <script src="https://insight.dashevo.org/socket.io/socket.io.js"></script>
+  <script src="vendor/index.js"></script>
+  <script>
+    function displayError(errorType) {
+      var errorMessage = "Unknown issue.";
+      if (errorType) {
+        switch (errorType) {
+          case "missing_build":
+            errorMessage = "Missing file : vendor/index.js. Did you run `npm run build` ?";
+            break;
+          default:
+            break;
         }
-        $(document).ready(function() {
-            typeof(_dashcore) !== "undefined" || displayError('missing_build')
-        });
-    </script>
+        document.getElementsByClassName('progress-bar')[0].style.width = "100%";
+        document.getElementsByClassName('progress-bar')[0].style.background = "red";
+        document.getElementsByClassName('progress-bar')[0].innerText = errorMessage;
+      }
+    }
+    $(document).ready(function () {
+      typeof (_dashcore) !== "undefined" || displayError('missing_build')
+    });
+  </script>
 </head>
 <body>
 
   <div class="modal fade" id="error_modal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="gridSystemModalLabel">Error</h4>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-xs-offset-4 col-xs-8">
-            <div id="error_text">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="gridSystemModalLabel">Error</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-offset-4 col-xs-8">
+              <div id="error_text">
 
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 
-<div class="container-fluid">
-  <div class="row" id="header">
+  <div class="container-fluid">
+    <div class="row" id="header">
       <div class="col-md-2">
         <img id="dash_logo" src="images/dash_logo.png" alt="dash governance tools">
         <div class="row">
           <div class="col-xs-12">
-            <h4><i>Governance Tools</i></h4>
+            <h4>Governance Tools</h4>
           </div>
         </div>
       </div>
@@ -93,253 +96,259 @@
         <i class="fa fa-rss" aria-hidden="true"></i>
         <img id="lang_box" src="images/lang.png" alt="english language">
       </div> -->
-  </div>
-
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="25"
-        aria-valuemin="0" aria-valuemax="100" style="width:25%">
-          Create Proposal
-        </div>
-      </div>
-      <ul class="nav nav-pills">
-        <li class="active"><a id="step_one" data-toggle="tab" href="#step1">Create a Proposal</a></li>
-        <li><a id="step_two" class="hidden" data-toggle="tab" href="#step2">Wallet Commands</a></li>
-        <li><a id="step_three" class="hidden" data-toggle="tab" href="#step3">Confirm Transaction</a></li>
-        <li><a id="step_four" class="hidden" data-toggle="tab" href="#step4">Submit Proposal</a></li>
-      </ul>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="col-lg-2 col-md-2 col-md-push-8">
-      <div class="row" id="side-header">
-        <div class="col-xs-12">
-          <div>
-            <h3 class="header_title">Dash Budget Proposal</h3>
-            <p id="side_header_description" class="header_description">Generate budget proposal commands you can copy/paste into your Dash wallet to prepare a budget proposal and submit it to the network.</p>
-             <p>
-                 <svg class="octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
-                 <a href="https://github.com/dashevo/proposal-generator">Source code</a>
-             </p>
-             <!--  <a href="#"><h5 id="proposal_link">Proposal Generator</h5></a> -->
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width:25%">
+            Create Proposal
+          </div>
+        </div>
+        <ul class="nav nav-pills">
+          <li class="active"><a id="step_one" data-toggle="tab" href="#step1">Create a Proposal</a></li>
+          <li><a id="step_two" class="hidden" data-toggle="tab" href="#step2">Wallet Commands</a></li>
+          <li><a id="step_three" class="hidden" data-toggle="tab" href="#step3">Confirm Transaction</a></li>
+          <li><a id="step_four" class="hidden" data-toggle="tab" href="#step4">Submit Proposal</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-2 col-md-2 col-md-push-8">
+        <div class="row" id="side-header">
+          <div class="col-xs-12">
+            <div>
+              <h3 class="header_title">Dash Budget Proposal</h3>
+              <p id="side_header_description" class="header_description">Generate budget proposal commands
+                you can copy/paste into your Dash wallet to prepare a budget proposal and submit it to
+                the network.</p>
+              <p>
+                <svg class="octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="16" height="16"
+                  aria-hidden="true">
+                  <path fill-rule="evenodd"
+                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z">
+                  </path>
+                </svg>
+                <a href="https://github.com/dashevo/proposal-generator">Source code</a>
+              </p>
+              <!--  <a href="#"><h5 id="proposal_link">Proposal Generator</h5></a> -->
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-lg-6 col-md-6 col-md-offset-2 col-md-pull-2 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
+      <div class="col-lg-6 col-md-6 col-md-offset-2 col-md-pull-2 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0">
 
-      <div class="tab-content">
-        <div id="step1" class="tab-pane fade in active">
-          <div class="proposalBlock createProposal">
-            <div class="row">
-              <div class="col-xs-offset-8 col-xs-4">
-                <div id="network_toggle" class="btn-group" data-toggle="buttons">
+        <div class="tab-content">
+          <div id="step1" class="tab-pane fade in active">
+            <div class="proposalBlock createProposal">
+              <div class="row">
+                <div>
+                  <div id="network_toggle" class="btn-group pull-right" data-toggle="buttons">
                     <label class="btn btn-primary active">
-                        <input type="radio" name="options" id="mainnet" autocomplete="off" checked> Mainnet
+                      <input type="radio" name="options" id="mainnet" autocomplete="off" checked>Mainnet
                     </label>
                     <label class="btn btn-primary">
-                        <input type="radio" name="options" id="testnet" autocomplete="off"> Testnet
+                      <input type="radio" name="options" id="testnet" autocomplete="off"> Testnet
                     </label>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-xs-12">
-                <div class="row" id="createProposalHeader">
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="row" id="createProposalHeader">
                     <div class="col-xs-12">
-                        <h1 class="removeMargin">Create a Proposal</h1>
-                        <h5 class="header_description">Enter details for your Proposal and click 'Create Proposal'.  This will generate a command you can run in your local wallet to prepare the Proposal at a cost of 5 DASH.</h5>
+                      <h1 class="removeMargin">Create a Proposal</h1>
+                      <h5 class="header_description">Enter details for your Proposal and click 'Create Proposal'. This will generate a command you can run in your local wallet to prepare the Proposal at a cost of 5 DASH.</h5>
                     </div>
-                </div>
+                  </div>
 
-                <div id="createProposalForm">
-                  <div class="row">
-                    <div class="col-xs-12">
-                      <div class="form-group">
+                  <div id="createProposalForm">
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <div class="form-group">
                           <label for="name">Proposal Name:</label>
                           <input type="text" class="form-control" id="name" value="" placeholder="proposal-name">
-                      </div>
-                      <div class="form-group">
+                        </div>
+                        <div class="form-group">
                           <label for="url">Proposal Description URL:</label>
                           <input type="text" class="form-control" id="url" value="" placeholder="https://www.dashcentral.org/p/proposal-name">
+                        </div>
                       </div>
                     </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-xs-3">
-                      <div class="form-group">
-                          <label for="start_epoch">Payment Date:</label>
-                          <select name="start_epoch" class="form-control" id="start_epoch"></select>
-                      </div>
-                    </div>
-                    <div class="col-xs-3">
-                      <!--  -->
-                      <!--  -->
-                      <!-- ATTENTION: COMMENT FOR JON -->
-                      <!--  -->
-                      <!--  -->
-                      <!-- The following form group is a placeholder for proposal end time. Please change to the correct id. -->
-                      <div class="form-group">
-                          <label for="start_epoch">Payments:</label>
-                          <select name="start_epoch" class="form-control" id="end_epoch"></select>
-                      </div>
-                      <!--  -->
-                      <!--  -->
-                      <!--  -->
-                    </div>
-                    <div class="col-xs-6">
-                      <div class="form-group">
-                          <label for="payment_address">Payment Address:</label>
-                          <input type="text" class="form-control" id="payment_address" value="" placeholder="">
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-xs-7">
-                      <div class="form-group">
-                          <label for="payment_amount">Payment Amount:</label>
-                          <input type="text" class="form-control" id="payment_amount" value="" placeholder="0">
-                      </div>
-                    </div>
-                    <div class="col-xs-4">
-                      <input type="submit" class="btn btn-success" id="btnPrepare" value="Create Proposal">
-                      <div class="input-spacing">
-                        <input type="submit" class="btn btn-primary hidden" id="btnEdit" value="Edit Proposal">
-                      </div>
-                      <div class="input-spacing">
-                        <input type="submit" class="btn btn-primary hidden" id="btnNew" value="New Proposal">
-                      </div>
-                    </div>
-                  </div>
 
                     <div class="row">
-                        <div class="col-xs-12">
-                            <div class="form-group">
-                                <label for="total_amount">Total Amount: </label>
-                                <span id="total_amount">0</span> <span>DASH</span> <span id="total_amount_due"></span>
-                            </div>
+                      <div class="col-xs-3">
+                        <div class="form-group">
+                          <label for="start_epoch">Payment Date:</label>
+                          <select name="start_epoch" class="form-control" id="start_epoch"></select>
                         </div>
+                      </div>
+                      <div class="col-xs-3">
+                        <!--  -->
+                        <!--  -->
+                        <!-- ATTENTION: COMMENT FOR JON -->
+                        <!--  -->
+                        <!--  -->
+                        <!-- The following form group is a placeholder for proposal end time. Please change to the correct id. -->
+                        <div class="form-group">
+                          <label for="start_epoch">Payments:</label>
+                          <select name="start_epoch" class="form-control" id="end_epoch"></select>
+                        </div>
+                        <!--  -->
+                        <!--  -->
+                        <!--  -->
+                      </div>
+                      <div class="col-xs-6">
+                        <div class="form-group">
+                          <label for="payment_address">Payment Address:</label>
+                          <input type="text" class="form-control" id="payment_address" value="" placeholder="">
+                        </div>
+                      </div>
                     </div>
 
-                  <div class="form-group" style="display:none;">
+                    <div class="row">
+                      <div class="col-xs-8">
+                        <div class="form-group">
+                          <label for="payment_amount">Payment Amount:</label>
+                          <input type="text" class="form-control" id="payment_amount" value="" placeholder="0">
+                        </div>
+                      </div>
+                      <div class="col-xs-4">
+                        <input type="submit" class="btn btn-success pull-right" id="btnPrepare" value="Create Proposal">
+                        <div class="input-spacing">
+                          <input type="submit" class="btn btn-primary hidden" id="btnEdit" value="Edit Proposal">
+                        </div>
+                        <div class="input-spacing">
+                          <input type="submit" class="btn btn-primary hidden" id="btnNew" value="New Proposal">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <div class="form-group">
+                          <label for="total_amount">Total Amount: </label>
+                          <span id="total_amount">0</span> <span>DASH</span> <span id="total_amount_due"></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group" style="display:none;">
                       <label for="type">type:</label>
                       <input type="text" class="form-control" id="type" value="1" placeholder="1">
-                  </div>
+                    </div>
 
-                  <div class="form-group" style="display:none;">
+                    <div class="form-group" style="display:none;">
                       <label for="parentHash">parent-hash:</label>
                       <input type="text" class="form-control" id="parentHash" value="0" placeholder="0">
-                  </div>
+                    </div>
 
-                  <div class="form-group" style="display:none;">
+                    <div class="form-group" style="display:none;">
                       <label for="revision">revision:</label>
                       <input type="text" class="form-control" id="revision" value="1" placeholder="1">
-                  </div>
+                    </div>
 
-                  <div class="form-group" style="display:none;">
+                    <div class="form-group" style="display:none;">
                       <label for="time">Creation Time:</label>
                       <input type="text" class="form-control" id="time" value="" placeholder="">
+                    </div>
+
+                    <!--  -->
+                    <!--  -->
+                    <!--  -->
+                    <!-- ATTENTION: COMMENT FOR JON -->
+                    <!-- The following form group is commented out because it's not a part of the design mock. Staying here for safe keeping just in case still needed. -->
+
+                    <!-- <div class="form-group">
+                        <label for="end_epoch">Choose payment cycle:</label>
+                        <select name="end_epoch" class="form-control" id="end_epoch"></select>
+                    </div> -->
                   </div>
-
-                  <!--  -->
-                  <!--  -->
-                  <!--  -->
-                  <!-- ATTENTION: COMMENT FOR JON -->
-                  <!-- The following form group is commented out because it's not a part of the design mock. Staying here for safe keeping just in case still needed. -->
-
-                  <!-- <div class="form-group">
-                      <label for="end_epoch">Choose payment cycle:</label>
-                      <select name="end_epoch" class="form-control" id="end_epoch"></select>
-                  </div> -->
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div id="step2" class="tab-pane fade">
-          <div class="proposalBlock">
-            <div class="row walletCommands hidden" id="walletCommandsHeader" style="margin-top:0em;">
+          <div id="step2" class="tab-pane fade">
+            <div class="proposalBlock">
+              <div class="row walletCommands hidden" id="walletCommandsHeader" style="margin-top:0em;">
                 <div class="col-xs-12">
-                    <h2>Wallet Commands</h2>
+                  <h2>Wallet Commands</h2>
                 </div>
 
+              </div>
+
+              <div class="row walletCommands hidden" id="walletCommandsPrepare">
+
+                <div class="col-xs-12">
+
+                  <div class="form-group">
+                    <label for="prepareProposal">Prepare Proposal Command:</label>
+                    <p>Paste the following into your wallet console to generate the Proposal at a cost of 5 DASH.</p>
+                    <textarea readonly class="form-control" id="prepareProposal" rows="4" placeholder=""></textarea>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="row walletCommands hidden" id="walletCommandsTx">
+
+                <div class="col-xs-12">
+
+                  <div class="form-group">
+                    <label for="feeTxid">Transaction ID:</label>
+                    <p>Paste the resulting transaction id to move to the next step.</p>
+                    <input type="text" class="form-control" id="feeTxid" value="" placeholder="<fee-txid>">
+                  </div>
+
+                </div>
+
+              </div>
             </div>
-
-            <div class="row walletCommands hidden" id="walletCommandsPrepare">
+          </div>
+          <div id="step3" class="tab-pane fade">
+            <div class="proposalBlock">
+              <div class="row walletCommands hidden" id="walletCommandsProgress" style="margin-top:0em">
 
                 <div class="col-xs-12">
 
-                        <div class="form-group">
-                            <label for="prepareProposal">Prepare Proposal Command:</label>
-                            <p>Paste the following into your wallet console to generate the Proposal at a cost of 5 DASH.</p>
-                            <textarea readonly class="form-control" id="prepareProposal" rows="4" placeholder=""></textarea>
-                        </div>
+                  <div class="form-group">
+                    <label for="feeTxid">Confirm Transaction:</label>
+                    <p id="progresstxt">Waiting for 6 block confirmations, this should take approximately 15 minutes.</p>
+                    <div id="progressbar"></div>
+                  </div>
 
                 </div>
 
+              </div>
             </div>
-
-            <div class="row walletCommands hidden" id="walletCommandsTx">
+          </div>
+          <div id="step4" class="tab-pane fade">
+            <div class="proposalBlock">
+              <div class="row walletCommands hidden" id="walletCommandsSubmit" style="margin-top:0em;">
 
                 <div class="col-xs-12">
 
-                    <div class="form-group">
-                        <label for="feeTxid">Transaction ID:</label>
-                        <p>Paste the resulting transaction id to move to the next step.</p>
-                        <input type="text" class="form-control" id="feeTxid" value="" placeholder="<fee-txid>">
-                    </div>
+                  <div class="form-group">
+                    <label for="submitProposal">Submit Proposal:</label>
+                    <p>Paste the following into your wallet console to submit your Proposal. </p>
+                    <textarea readonly class="form-control" id="submitProposal" rows="4" placeholder=""></textarea>
+                    <p style="margin-top: 1em;">This is the last step, you will receive your unique Proposal ID as output.</p>
+                  </div>
 
                 </div>
 
+              </div>
             </div>
           </div>
         </div>
-        <div id="step3" class="tab-pane fade">
-          <div class="proposalBlock">
-            <div class="row walletCommands hidden" id="walletCommandsProgress" style="margin-top:0em">
 
-                <div class="col-xs-12">
-
-                    <div class="form-group">
-                        <label for="feeTxid">Confirm Transaction:</label>
-                        <p id="progresstxt">Waiting for 6 block confirmations, this should take approximately 15 minutes.</p>
-                        <div id="progressbar"></div>
-                    </div>
-
-                </div>
-
-            </div>
-          </div>
-        </div>
-        <div id="step4" class="tab-pane fade">
-          <div class="proposalBlock">
-            <div class="row walletCommands hidden" id="walletCommandsSubmit" style="margin-top:0em;">
-
-                <div class="col-xs-12">
-
-                    <div class="form-group">
-                        <label for="submitProposal">Submit Proposal:</label>
-                        <p>Paste the following into your wallet console to submit your Proposal. </p>
-                        <textarea readonly class="form-control" id="submitProposal" rows="4" placeholder=""></textarea>
-                        <p style="margin-top: 1em;">This is the last step, you will receive your unique Proposal ID as output.</p>
-                    </div>
-
-                </div>
-
-            </div>
-          </div>
-        </div>
       </div>
-
     </div>
-
   </div>
-</div>
+  </div>
 
 </body>
 </html>
