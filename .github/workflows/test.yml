@@ -1,0 +1,18 @@
+name: Run test build
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    name: Test build
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Run build
+        run: bash scripts/build.sh
+
+      - name: Check build result
+        run: test -d dist
