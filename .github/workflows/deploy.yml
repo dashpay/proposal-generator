@@ -2,7 +2,7 @@ name: Deploy release to S3 bucket
 
 on:
   push:
-    branches:    
+    branches:
       - 'release'
   workflow_dispatch:
 
@@ -25,7 +25,7 @@ jobs:
 
       - name: Build
         run: bash scripts/build.sh
-  
+
       - name: Deploy
         uses: reggionick/s3-deploy@v3
         with:
@@ -33,7 +33,7 @@ jobs:
           bucket: ${{ secrets.S3_BUCKET }}
           bucket-region: ${{ secrets.AWS_REGION }}
           dist-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
-          invalidation: /
+          invalidation: "/*"
           delete-removed: true
           no-cache: true
           private: true
