@@ -31,7 +31,7 @@ jobs:
 
       - name: Copy site to s3 with the AWS CLI
         run: |
-          aws --region ${{ secrets.AWS_REGION }} s3 --acl private sync dist/ s3://${{ secrets.S3_BUCKET }}/${{ secrets.S3_PREFIX }}/
+          aws --region ${{ secrets.AWS_REGION }} s3 sync --acl private dist/ s3://${{ secrets.S3_BUCKET }}/${{ secrets.S3_PREFIX }}/
 
       - name: Request CloudFront invalidation of all objects
         run: |
