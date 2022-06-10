@@ -29,19 +29,10 @@ jobs:
       - name: Build
         run: bash scripts/build.sh
 
-      - name: Setup Node.JS
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
+      - name: Copy site to s3 with the AWS CLI
+        run: |
+          aws --region ${{ secrets.AWS_REGION }} s3 --acl private sync dist/ s3://${{ secrets.S3_BUCKET }}/${{ secrets.S3_PREFIX }}/
 
-      - name: Deploy
-        uses: reggionick/s3-deploy@v3
-        with:
-          folder: ${{ secrets.S3_PREFIX }}
-          bucket: ${{ secrets.S3_BUCKET }}
-          bucket-region: ${{ secrets.AWS_REGION }}
-          dist-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
-          invalidation: "/*"
-          delete-removed: true
-          no-cache: true
-          private: true
+      - name: Request CloudFront invalidation of all objects
+        run: |
+          aws --region ${{ secrets.AWS_REGION }} cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths '/*'
