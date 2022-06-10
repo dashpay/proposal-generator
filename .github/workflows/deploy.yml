@@ -29,6 +29,11 @@ jobs:
       - name: Build
         run: bash scripts/build.sh
 
+      - name: Setup Node.JS
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
       - name: Deploy
         uses: reggionick/s3-deploy@v3
         with:
