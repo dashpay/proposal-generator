@@ -53,3 +53,7 @@ vendor/index.js
 
 # vars defined in .env
 .env
+
+# Apple spotlight
+.DS_Store
+.DS_Store?
